@@ -35,27 +35,26 @@ df.head(len(df))
 - ROA = Lucro Líquido / Ativo Total *  100
 """
 
+import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-
+st.title("Indicadores Financeiros por Ano")
 df = pd.read_csv("empresas_dados.csv", sep=";")
-
 df["Margem Líquida (%)"] = (df["Lucro Líquido"] / df["Receita Líquida"]) * 100
 df["ROA (%)"] = (df["Lucro Líquido"] / df["Ativo Total"]) * 100
-
 df_agrupado = df.groupby("Ano")[["Margem Líquida (%)", "ROA (%)"]].mean().reset_index()
-
-plt.figure(figsize=(10, 6))
-plt.plot(df_agrupado["Ano"], df_agrupado["Margem Líquida (%)"], marker='o', label="Margem Líquida (%)")
-plt.plot(df_agrupado["Ano"], df_agrupado["ROA (%)"], marker='s', label="ROA (%)")
-plt.title("Indicadores Margem Líquida e ROA por Ano")
-plt.xlabel("Ano")
-plt.ylabel("Percentual (%)")
-plt.legend()
-plt.grid(True)
-plt.xticks(df_agrupado["Ano"], rotation=45)
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.plot(df_agrupado["Ano"], df_agrupado["Margem Líquida (%)"], marker='o', label="Margem Líquida (%)")
+ax.plot(df_agrupado["Ano"], df_agrupado["ROA (%)"], marker='s', label="ROA (%)")
+ax.set_title("Indicadores Margem Líquida e ROA por Ano")
+ax.set_xlabel("Ano")
+ax.set_ylabel("Percentual (%)")
+ax.legend()
+ax.grid(True)
+ax.set_xticks(df_agrupado["Ano"])
+plt.xticks(rotation=45)
 plt.tight_layout()
-plt.show()
+st.pyplot(fig)
 
 """4) Utilize o pacote ipeadatapy e faça busca para encontrar o indicador que traga o IPCA, taxa de variação, em % e anual: (peso: 2,0)
 
