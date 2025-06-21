@@ -15,17 +15,15 @@ df_empresas["Margem Líquida"] = (df_empresas["Lucro Líquido"] / df_empresas["R
 df_empresas["ROA"] = (df_empresas["Lucro Líquido"] / df_empresas["Ativo Total"]) * 100
 
 df_ipca = ip.timeseries('PRECOS12_IPCA12').reset_index()
+print(df_ipca.columns)
 df_ipca = df_ipca[(df_ipca['YEAR'] >= 2010) & (df_ipca['YEAR'] <= 2024)]
-df_ipca = df_ipca.rename(columns={'YEAR': 'Ano', 'VALUE': 'IPCA'})
-
-
-df_combinado = pd.merge(df_empresas, df_ipca, on="Ano", how="left")
+df_ipca = df_ipca.rename(columns={'YEAR': 'Ano', 'VALUE (-)': 'IPCA'})
+df_empresas = pd.read_csv("empresas_dados.csv", sep=";")
+df_combinado = pd.merge(df_empresas, df_ipca, on='Ano', how='left')
 df_combinado["Receita Real"] = df_combinado["Receita Líquida"] - (
-    df_combinado["Receita Líquida"] * (df_combinado["IPCA"] / 100)
+    df_combinado["Receita Líquida"] * (df_combinado['IPCA'] / 100)
 )
-st.subheader("Tabela com Receita Real")
-st.dataframe(df_combinado)
-
+df_combinado.head()
 import matplotlib.pyplot as plt
 
 df_plot = df_combinada.groupby('Ano')[['Receita Líquida', 'Receita Real']].sum().reset_index()
