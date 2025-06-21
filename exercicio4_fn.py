@@ -95,8 +95,26 @@ df_2
 """6) Crie gráfico de linha que apresente as variáveis Receita Líquida e Receita Real ao longo dos anos (no mesmo gráfico) (peso: 1,0)"""
 
 import streamlit as st
-import pandas as pd
 import matplotlib.pyplot as plt
+import pandas as pd
+
+df_plot = df_2.groupby('Ano')[['Receita Líquida', 'Receita Real']].sum().reset_index()
+
+fig, ax = plt.subplots(figsize=(12, 6))
+ax.plot(df_plot['Ano'], df_plot['Receita Líquida'], label='Receita Líquida', marker='o')
+ax.plot(df_plot['Ano'], df_plot['Receita Real'], label='Receita Real', marker='s')
+
+ax.set_title('Receita Líquida vs Receita Real ao longo dos anos')
+ax.set_xlabel('Ano')
+ax.set_ylabel('Valor (R$)')
+ax.legend()
+ax.grid(True)
+ax.set_xticks(df_plot['Ano'])
+ax.set_xticklabels(df_plot['Ano'], rotation=45)
+
+plt.tight_layout()
+
+st.pyplot(fig)
 
 st.title("Receita Líquida vs Receita Real ao longo dos anos")
 df_2 = pd.read_csv("empresas_dados.csv", sep=";")
