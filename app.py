@@ -26,7 +26,7 @@ df_combinado["Receita Real"] = df_combinado["Receita Líquida"] - (
 df_combinado.head()
 import matplotlib.pyplot as plt
 
-df_plot = df_combinada.groupby('Ano')[['Receita Líquida', 'Receita Real']].sum().reset_index()
+df_plot = df_combinado .groupby('Ano')[['Receita Líquida', 'Receita Real']].sum().reset_index()
 
 plt.figure(figsize=(12,6))
 plt.plot(df_plot['Ano'], df_plot['Receita Líquida'], label='Receita Líquida', marker='o')
