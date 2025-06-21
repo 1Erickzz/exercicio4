@@ -97,8 +97,12 @@ df_2
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+
 st.title("Receita Líquida vs Receita Real ao longo dos anos")
 df_2 = pd.read_csv("empresas_dados.csv", sep=";")
+df_2["Receita Líquida"] = pd.to_numeric(df_2["Receita Líquida"], errors="coerce")
+df_2["IPCA"] = pd.to_numeric(df_2["IPCA"], errors="coerce")
+df_2["Receita Real"] = df_2["Receita Líquida"] - (df_2["Receita Líquida"] * df_2["IPCA"])
 df_plot = df_2.groupby('Ano')[['Receita Líquida', 'Receita Real']].sum().reset_index()
 fig, ax = plt.subplots(figsize=(12, 6))
 ax.plot(df_plot['Ano'], df_plot['Receita Líquida'], label='Receita Líquida', marker='o')
@@ -113,6 +117,7 @@ ax.set_xticks(df_plot['Ano'])
 plt.xticks(rotation=45)
 plt.tight_layout()
 st.pyplot(fig)
+
 
 """7) Faça os ajustes necessários e leve este projeto para a web usando GitHub e Streamlit (peso: 2,0)
 
